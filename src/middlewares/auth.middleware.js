@@ -1,6 +1,8 @@
 import HttpStatus from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret'; // Match your login service
+
 /**
  * Middleware to authenticate if user has a valid Authorization token
  * Authorization: Bearer <token>
@@ -19,8 +21,9 @@ export const userAuth = async (req, res, next) => {
       };
     bearerToken = bearerToken.split(' ')[1];
 
-    const { user } = await jwt.verify(bearerToken, 'your-secret-key');
-    res.locals.user = user;
+    // This now matches your login token structure: { id, email }
+    const userData = await jwt.verify(bearerToken, JWT_SECRET);
+    res.locals.user = userData; // Contains { id, email }
     res.locals.token = bearerToken;
     next();
   } catch (error) {
