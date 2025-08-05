@@ -20,9 +20,13 @@ export const newNote = async (req, res, next) => {
       data: data.data,
       message: data.message
     });
-  } catch (error) {
-    next(error);
-  }
+   } catch (error) {
+  res.status(500).json({
+    code: 500,
+    data: null,
+    message: error.message || 'Something went wrong',
+  });
+}
 };
 
 export const getAllNotes = async (req, res, next) => {
@@ -39,8 +43,12 @@ export const getAllNotes = async (req, res, next) => {
       message: data.message
     });
   } catch (error) {
-    next(error);
-  }
+  res.status(500).json({
+    code: 500,
+    data: null,
+    message: error.message || 'Something went wrong',
+  });
+}
 };
 
 export const getSingleNote = async (req, res, next) => {
@@ -56,8 +64,12 @@ export const getSingleNote = async (req, res, next) => {
       message: data.message
     });
   } catch (error) {
-    next(error);
-  }
+  res.status(500).json({
+    code: 500,
+    data: null,
+    message: error.message || 'Something went wrong',
+  });
+}
 };
 
 export const updateNote = async (req, res, next) => {
@@ -73,8 +85,12 @@ export const updateNote = async (req, res, next) => {
       message: data.message
     });
   } catch (error) {
-    next(error);
-  }
+  res.status(500).json({
+    code: 500,
+    data: null,
+    message: error.message || 'Something went wrong',
+  });
+}
 };
 
 export const deleteNote = async (req, res, next) => {
@@ -89,9 +105,13 @@ export const deleteNote = async (req, res, next) => {
       data: data.data,
       message: data.message
     });
-  } catch (error) {
-    next(error);
-  }
+ } catch (error) {
+  res.status(500).json({
+    code: 500,
+    data: null,
+    message: error.message || 'Something went wrong',
+  });
+}
 };
 
 export const archiveNote = async (req, res, next) => {
@@ -106,7 +126,11 @@ export const archiveNote = async (req, res, next) => {
       data: data.data,
       message: data.message
     });
-  } catch (error) {
-    next(error);
-  }
+ } catch (error) {
+  res.status(500).json({
+    code: 500,
+    data: null,
+    message: error.message || 'Something went wrong',
+  });
+}
 };

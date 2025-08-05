@@ -10,16 +10,16 @@ export const newUser = async (body) => {
   try {
     const user = await User.findOne({ email: body.email })
     if (user) {
-      return { code: 409, data: [], message: "User already exists" }
+      return { code: HttpStatus.BAD_REQUEST, data: [], message: "User already exists" , success: false }
     }
 
     body.password = await bcrypt.hash(body.password, saltRounds)
     const newUser = await User.create(body)
 
-    return { code: 201, data: newUser, message: "User created successfully!" }
+    return { code: HttpStatus.CREATED, data: newUser, message: "User created successfully!" ,success: true }
   } catch (err) {
     console.error(err)
-    return { code: 500, data: [], message: "Error creating user" }
+    return { code: HttpStatus.BAD_REQUEST, data: [], message: "Error creating user" }
   }
 }
 
@@ -27,12 +27,12 @@ export const userLogin = async ({ email, password }) => {
   try {
     const user = await User.findOne({ email })
     if (!user) {
-      return { code: 404, data: [], message: "No user found" }
+      return { code: HttpStatus.BAD_REQUEST, data: [], message: "No user found" , success: false}
     }
 
     const match = await bcrypt.compare(password, user.password)
     if (!match) {
-      return { code: 401, data: [], message: "Invalid credentials" }
+      return { code: HttpStatus.BAD_REQUEST, data: [], message: "Invalid credentials", success: false }
     }
 
     // Generate JWT token
@@ -43,16 +43,17 @@ export const userLogin = async ({ email, password }) => {
     )
 
     return {
-      code: 200,
+      code: HttpStatus.OK,
       data: {
         id: user._id,
         email: user.email,
         token,
       },
-      message: "Login successful"
+      message: "Login successful",
+      success: true
     }
   } catch (err) {
     console.error(err)
-    return { code: 500, data: [], message: "Error during login" }
+    return { code: HttpStatus.BAD_REQUEST, data: [], message: "Error during login" , success: false }
   }
 }

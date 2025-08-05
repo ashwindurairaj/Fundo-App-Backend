@@ -1,4 +1,6 @@
 import Note from '../models/note.model.js'
+import HttpStatus from 'http-status-codes'
+
 
 export const createNote = async (body, userId) => {
   try {
@@ -9,10 +11,10 @@ export const createNote = async (body, userId) => {
 
     const newNote = await Note.create(noteData)
 
-    return { code: 201, data: newNote, message: "Note created successfully!" }
+    return { code: HttpStatus.CREATED, data: newNote, message: "Note created successfully!" }
   } catch (err) {
     console.error(err)
-    return { code: 500, data: [], message: "Error creating note" }
+    return { code: HttpStatus.BAD_REQUEST, data: [], message: "Error creating note" }
   }
 }
 
@@ -24,14 +26,14 @@ export const getNotes = async (userId) => {
     }).populate('createdBy', 'firstName lastName email')
 
     return { 
-      code: 200, 
+      code: HttpStatus.OK, 
       data: notes, 
       message: "Notes retrieved successfully!" 
     }
   } catch (err) {
     console.error(err)
     return { 
-      code: 500, 
+      code: HttpStatus.BAD_REQUEST, 
       data: [], 
       message: "Error retrieving notes" 
     }
@@ -48,21 +50,21 @@ export const getSingleNote = async (noteId, userId) => {
     
     if (!note) {
       return { 
-        code: 404, 
+        code: HttpStatus.BAD_GATEWAY, 
         data: null, 
         message: "Note not found or unauthorized" 
       }
     }
 
     return { 
-      code: 200, 
+      code: HttpStatus.OK, 
       data: note, 
       message: "Note retrieved successfully!" 
     }
   } catch (err) {
     console.error(err)
     return { 
-      code: 500, 
+      code: HttpStatus.BAD_REQUEST, 
       data: null, 
       message: "Error retrieving note" 
     }
@@ -75,7 +77,7 @@ export const updateNote = async (noteId, body, userId) => {
     
     if (!note) {
       return { 
-        code: 404, 
+        code: HttpStatus.BAD_REQUEST, 
         data: null, 
         message: "Note not found or unauthorized" 
       }
@@ -88,14 +90,14 @@ export const updateNote = async (noteId, body, userId) => {
     ).populate('createdBy', 'firstName lastName email')
 
     return { 
-      code: 200, 
+      code: HttpStatus.OK, 
       data: updatedNote, 
       message: "Note updated successfully!" 
     }
   } catch (err) {
     console.error(err)
     return { 
-      code: 500, 
+      code: HttpStatus.BAD_REQUEST, 
       data: null, 
       message: "Error updating note" 
     }
@@ -108,7 +110,7 @@ export const deleteNote = async (noteId, userId) => {
     
     if (!note) {
       return { 
-        code: 404, 
+        code: HttpStatus.BAD_REQUEST, 
         data: null, 
         message: "Note not found or unauthorized" 
       }
@@ -122,14 +124,14 @@ export const deleteNote = async (noteId, userId) => {
     ).populate('createdBy', 'firstName lastName email')
 
     return { 
-      code: 200, 
+      code: HttpStatus.OK, 
       data: deletedNote, 
       message: "Note moved to trash successfully!" 
     }
   } catch (err) {
     console.error(err)
     return { 
-      code: 500, 
+      code: HttpStatus.BAD_REQUEST, 
       data: null, 
       message: "Error deleting note" 
     }
@@ -142,7 +144,7 @@ export const archiveNote = async (noteId, userId) => {
     
     if (!note) {
       return { 
-        code: 404, 
+        code: HttpStatus.BAD_REQUEST, 
         data: null, 
         message: "Note not found or unauthorized" 
       }
@@ -155,14 +157,14 @@ export const archiveNote = async (noteId, userId) => {
     ).populate('createdBy', 'firstName lastName email')
 
     return { 
-      code: 200, 
+      code: HttpStatus.OK, 
       data: archivedNote, 
       message: `Note ${note.isArchive ? 'unarchived' : 'archived'} successfully!` 
     }
   } catch (err) {
     console.error(err)
     return { 
-      code: 500, 
+      code: HttpStatus.BAD_REQUEST, 
       data: null, 
       message: "Error archiving note" 
     }
